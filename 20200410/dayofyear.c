@@ -11,7 +11,7 @@ int isLeap(int year)
 }
 
 // y년 m월 d일의 그 해 지난 날 수를 구합니다
-int calculate(int lyear, int month, int day)
+int dayofyear(int lyear, int month, int day)
 {
     int days = day;
     for (int i = 0; i < month - 1; i++)
@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
         printf("일 : ");
         scanf("%d", &day);
 
-        printf("%d년의 %d일쨰입니다.", year, calculate(isLeap(year), month, day));
+        printf("%d년의 %d일쨰입니다.", year, dayofyear(isLeap(year), month, day));
         printf("다시 할까요?(1...예 / 0...아니요)\n");
         scanf("%d", &i);
     } while (i);
