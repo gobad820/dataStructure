@@ -13,12 +13,21 @@ int isLeap(int year)
 // y년 m월 d일의 그 해 지난 날 수를 구합니다
 int dayofyear(int lyear, int month, int day)
 {
-    int days = day;
-    for (int i = 0; i < month - 1; i++)
+    // int days = day;
+    // for (int i = 0; i < month - 1; i++)
+    // {
+    //     days += mdays[lyear][i];
+    // }
+    // return days;
+
+    // TODO:I와 DAY를 사용하지 않고 while문을 사용해서 완성
+    month = month - 1;
+    while (month)
     {
-        days += mdays[lyear][i];
+        month--;
+        day += mdays[lyear][month];
     }
-    return days;
+    return day;
 }
 
 int main(int argc, char const *argv[])
