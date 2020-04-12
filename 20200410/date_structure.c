@@ -16,7 +16,8 @@ Date Before(Date x, int n);
 int main(int argc, char const *argv[])
 {
     Date a = {2020, 3, 5};
-    printf("년 : %d", a.year);
+    printf("연도 : %d", a.year);
+    // DateOf()
 
     return 0;
 }
