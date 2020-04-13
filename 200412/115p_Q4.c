@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-int binary(int a[], int n, int key);
+int binary(const int a[], int n, int key);
 int main(int argc, char const *argv[])
 {
     srand((unsigned)time(NULL));
@@ -14,6 +14,8 @@ int main(int argc, char const *argv[])
         // int flag = 0;
         // if (i == 0)
         *(ptr + i) = i;
+        if (i > 2)
+            *(ptr + i) = 7;
         // else
         // {
         //     *(ptr + i) = rand() % 10;
@@ -48,7 +50,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int binary(int a[], int n, int key)
+int binary(const int a[], int n, int key)
 {
     int pl = 0;
     int pr = n - 1;
@@ -82,7 +84,16 @@ int binary(int a[], int n, int key)
         printf("   |\n");
 
         if (a[pc] == key)
+        {
+            if (a[pc - 1] == key)
+            {
+
+                pr = pc - 1;
+                continue;
+            }
+
             return pc;
+        }
         else if (a[pc] < key)
         {
 
