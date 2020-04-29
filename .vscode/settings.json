@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "med.C": "c"
+        "med.C": "c",
+        "stdlib.h": "c",
+        "ringbufferqueue.h": "c"
     }
 }
