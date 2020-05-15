@@ -27,9 +27,6 @@ int main(int argc, char const *argv[])
         *(arr + i) = rand() % 100;
 
     insertionSort(new, size);
-    for (i = 0; i < size; i++)
-        printf("%d\n", *(new + i));
-
     return 0;
 }
 void insertionSort(int *arr, int size)
@@ -38,10 +35,33 @@ void insertionSort(int *arr, int size)
     for (i = 1; i < size; i++)
     {
         int tmp = arr[i];
+        for (int k = 0; k < size; k++)
+        {
+            printf("%2d", arr[k]);
+        }
+        printf("\n");
+
         for (j = i; j > 0 && arr[j - 1] > tmp; j--)
         {
             arr[j] = arr[j - 1];
         }
         arr[j] = tmp;
+        if (arr[i] == arr[j])
+        {
+            for (int m = 0; m < j; m++)
+            {
+                printf("   ");
+            }
+            printf("+");
+            printf("\n");
+        }
+        else
+        {
+            printf("^--");
+            for (int k = 0; k < i - 1; k++)
+                printf("---");
+            printf("+");
+            printf("\n");
+        }
     }
 }
