@@ -450,3 +450,200 @@ person2.sayHello();
   });
   Object.getOwnPropertyDescriptor(obj, "name");
   ```
+
+### Object.create의 두번쨰 인수
+
+---
+
+두 번쨰 인수로는 프로퍼티 디스크립터를 넘긴다.
+
+```javascript
+var group = {
+  groupName: "Tennis circle",
+  sayGroupName: function () {
+    console.log("belong to " + this.groupName);
+  },
+};
+var person = Object.create(gropu, {
+  name: {
+    value: "Tom",
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  },
+  age: {
+    value: 19,
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  },
+  sayName: {
+    value: function () {
+      console.log("I'm " + this.name);
+    },
+    writable: true,
+    enumerable: false,
+    configurable: true,
+  },
+});
+console.log(person);
+console.log(person.groupName);
+person.sayGroupName();
+person.sayName();
+```
+
+## 9.5 프로퍼티가 있는지 확인하기
+
+---
+
+### 9.5.1 in 연산자
+
+객체 안에 지명한 프로퍼티가 있는지 검색하며 그 대상은 객체 소유 프로퍼티와 상속받은 프로퍼티 모두이다.
+
+```javascript
+var person = { name: "Tom" };
+console.log("name" in person);
+console.log("age" in person);
+console.log("toString" in person);
+```
+
+### 9.5.2 hasOwnProperty 연산자
+
+객체가 소유한 property면 true, 없거나 상송 받은 프로퍼티는 false
+
+```javascript
+var person = { name: "Tom" };
+console.log(person.hasOwnProperty("name"));
+console.log(person.hasOwnProperty("toSTring"));
+```
+
+### 9.5.3 propertyIsEnumerable
+
+프로퍼티가 열거할 수 있을 때 true를 반환
+
+```javascript
+var person1 = { name: "Tom", age: 18 };
+var person2 = Object.create(person1);
+person2.name = "Huck";
+console.log(person2.propertyIsEnumerable("name"));
+console.log(person2.propertyIsEnumerable("age"));
+console.log(Object.prototype.propertyIsEnumerable("toString")); // method chain
+```
+
+## 9.6 프로퍼티의 열거
+
+---
+
+```javascript
+var person1 = { name: "Tom", age: 16 };
+var person2 = Object.create(person1);
+person2.name = "Huck";
+for (var p in person2) console.log(p);
+```
+
+### 9.6.2 Object.keys 메소드
+
+```javascript
+var group = {groupName: "Tennis Circle"};
+var person - Object.create(group);
+person.name = "tom";
+person.age = 17;
+person.sayHello = function(){
+  console.log("Hello! "+this.name);
+}
+Object.defineProperty(person,"sayHello",{enumerable:false});
+console.log(Object.keys(person));
+```
+
+### 9.6.3 Object.getOwnPropertyName 메소드
+
+```javascript
+console.log(Object.getownProeprtyNames(person));
+```
+
+- Object.keys + nonEnumerable property
+
+## 9.7 객체 잠그기
+
+---
+
+### 9.7.1 확장 가능 속성
+
+객체의 확장 가능 속성 : 객체에 새로운 프로퍼티를 추가할 수 있는지를 결정
+
+### 9.7.2 확장 방지 : Object.preventExtensions 메서드
+
+Object.preventExtensions 메소드는 인수로 받은 객체를 확장할 수 없게 만든다.
+
+```javascript
+var person = { name: "tom" };
+Object.preventExtensions(person);
+person.age = 18;
+console.log(person.age); // undefined
+console.log("age" in person); // false
+console.log(Object.isExtensible(person)); //false
+```
+
+### 9.7.3 밀봉 : Object.seal 메소드
+
+- 밀봉 : NonExtensible + NonRefinable
+
+```javascript
+var person = { name: "TOM" };
+Object.seal(person);
+person.age = 18;
+delete person.name;
+Object.defineProperty(person, "name", { enumerable: false });
+console.log("name" in person);
+console.log("age" in person);
+console.log(Object.getOwnPropertyDescriptor(person, "name"));
+person.name = "huck";
+console.log(perosn);
+console.log(Object.isSealed(person));
+```
+
+### 9.7.4 동결 : Object.freeze 메소드
+
+- 동결 : NonExtensible + NonRefinable + NonWritable
+- 읽기만 가능
+
+```javascript
+var person = { name: "Tom" };
+Object.freeze(person);
+console.log(Object.isFrozen(preson));
+```
+
+## 9.8 Mixin
+
+Mixin function은 특정 객체에 다른 객체가 가지고 있는 프로퍼티르 붙여 넣어 뒤섞는 기법
+믹스인은 상속 사용 X 특정 개체의 프로퍼티를 동적으로 다른 객체에 추가
+
+```javascript
+unction mixin(target, source) {
+  for (var property in source) {
+    if (source.hasOwnProperty(property)) {
+      // source 안에 property라는 프로퍼티가 있으면
+      target[property] = source[property]; // target에 프로퍼티로 추가
+      // 중복이 된다면 source 우선
+    }
+  }
+  return target;
+}
+
+var obj1 = { a: 1, b: 2 };
+var obj2 = { b: 3, c: 4 };
+var obj = mixin(obj1, obj2);
+console.log(obj);
+
+var objA = Object.assign(obj1, obj2);
+console.log(objA);
+
+```
+
+## 9.9 JSON
+
+JavaScript Object Notation 은 JS 객체를 문자열로 표현하는 데이터 포맷
+JSON 사용하면 객체를 직렬화할 수 있다.
+직렬화 = 컴퓨터의 메모리 속에 있는 객체를 똑같은 객체로 환원할 수 있는 문자열로 변환하는 과정
+
+## ECMAScript 6 추가된 내용
